@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>DOUYIN</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <script>
+        var siteId = 700005887 
+    </script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            background-color: #080808;
+            overflow: hidden;
+        }
+
+        .header img {
+            margin-top: 0.3rem;
+            width: 100%;
+        }
+
+        .form-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-item {
+            width: 3rem;
+            height: 1rem;
+            display: flex;
+        }
+
+        .input-item .input {
+            width: 100%;
+            height: 100%;
+            padding: 0.02rem;
+            resize: none;
+            color: #fff;
+            background-color: #080808;
+            border: 1px solid;
+            border-image: -webkit-linear-gradient( red, blue) 25 30;
+            border-image: -moz-linear-gradient( red, blue) 25 30;
+            border-image: linear-gradient( red, blue) 25 30;
+        }
+
+        .sure-btn {
+            margin-top: 0.3rem;
+            width: 1.5rem;
+            height: 0.4rem;
+            line-height: 0.4rem;
+            text-align: center;
+            color: #fff;
+            font-size: 0.20rem;
+            border: 1px solid;
+            font-weight: 100;
+            background: linear-gradient(to right, red, blue);
+            -webkit-background-clip: text;
+            color: transparent;
+            border-image: -webkit-linear-gradient( red, blue) 25 30;
+            border-image: -moz-linear-gradient( red, blue) 25 30;
+            border-image: linear-gradient( red, blue) 20 30;
+        }
+
+        .popup-layer {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .popup-layer .popup-body {
+            background-color: #080808;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 0.2rem;
+            overflow: hidden;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .popup-layer .popup-body .logo,
+        .popup-layer .popup-body .loading {
+            display: flex;
+        }
+
+        .popup-layer .popup-body .logo img {
+            width: 1.5rem;
+            height: 0.5rem;
+            margin-top: 0.2rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .popup-layer .popup-body .loading img {
+            width: 0.5rem;
+            height: 0.5rem;
+        }
+
+        .tip-bdoy {
+            width: 100%;
+            height: 0.4rem;
+            line-height: 0.4rem;
+            text-align: center;
+            background-color: #fff;
+            color: #000;
+            font-size: 0.18rem;
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            display: none;
+        }
+
+        .tip-in {
+            animation: tipOpen 500ms;
+            animation-fill-mode: forwards;
+            -webkit-animation: tipOpen 500ms;
+            -webkit-animation-fill-mode: forwards;
+            display: block;
+        }
+
+        @keyframes tipOpen {
+            0% {
+                transform: translateY(-40px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @-webkit-keyframes tipOpen {
+            0% {
+                transform: translateY(-40px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .tip-out {
+            animation: tipClose 500ms;
+            animation-fill-mode: forwards;
+            -webkit-animation: tipClose 500ms;
+            -webkit-animation-fill-mode: forwards;
+            display: block;
+        }
+
+        @keyframes tipClose {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-40px);
+            }
+        }
+
+        @-webkit-keyframes tipClose {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-40px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <img src="assets/douyin.gif">
+        </div>
+        <div class="form-body">
+            <div class="input-item">
+                <textarea class="input" placeholder="请输入要转换的连接"></textarea>
+            </div>
+            <div class="sure-btn" onclick="goReq()">转换</div>
+        </div>
+    </div>
+    <div class="tip-bdoy">
+        文字提示
+    </div>
+    <div class="popup-layer" style="display: none;">
+        <div class="popup-body">
+            <div class="logo">
+                <img src="assets/douyin.gif">
+            </div>
+            <div class="loading">
+                <img src="assets/loading.gif">
+            </div>
+        </div>
+    </div>
+    <script src="./js/countRem.js"></script>
+    <script src="./js/zepto.min.js"></script>
+    <script>
+        const videoUrl = 'https://aweme.snssdk.com/aweme/v1/play/?video_id=v0200f9a0000bclo2ilahtmckcqmoi0g&line=0&device_platform=iphone'
+        var goReq = function () {
+            const val = $(".input").val();
+            if (val.trim()) {
+                $(".popup-layer").show();
+                $.ajax({
+                    type:'POST',
+                    url: 'https://www.microfun.top/wxUrlPlus/douyin',
+                    dataType:'json',
+                    data:{
+                        url: val
+                    },
+                    success:function(data){
+                        $(".popup-layer").hide();
+                        window.open(videoUrl);
+                    },
+                    error:function(jqXHR){
+                        $(".popup-layer").hide();
+                        showTip('服务器异常,请联系管理员');
+                    }
+                });
+            } else {
+                showTip('请输入连接');
+            }
+        }
+        var showTip = function(text){
+            $(".tip-bdoy").html(text);
+            $(".tip-bdoy").addClass('tip-in');
+            var timeout = setTimeout(function(){
+                $(".tip-bdoy").removeClass('tip-in');
+                $(".tip-bdoy").addClass('tip-out');
+                clearTimeout(timeout);
+            },1000)
+        }
+    </script>
+</body>
+
+</html>
